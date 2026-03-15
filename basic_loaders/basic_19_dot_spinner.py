@@ -1,0 +1,37 @@
+import tkinter as tk
+import math
+
+class DotSpinner(tk.Canvas):
+    def __init__(self, parent, width=300, height=300, **kwargs):
+        super().__init__(parent, width=width, height=height, bg='#1E1E2E', highlightthickness=0, **kwargs)
+        self.cx = width / 2
+        self.cy = height / 2
+        self.frame_count = 0
+        self.animate()
+
+    def animate(self):
+        self.frame_count += 1
+        self.delete("all")
+        t = self.frame_count
+        cx, cy = self.cx, self.cy
+        for i in range(8):
+            angle = i * 45
+            r = 80
+            x = cx + r * math.cos(math.radians(angle))
+            y = cy + r * math.sin(math.radians(angle))
+            active = (t // 3) % 8 == i
+            self.create_oval(x - 12, y - 12, x + 12, y + 12, fill="#89DCEB" if active else "#3A3A4A", outline="")
+        self.after(30, self.animate)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Dot Spinner Loader")
+    root.configure(bg='#1E1E2E')
+    root.geometry("400x400")
+    
+    lbl = tk.Label(root, text="Dot Spinner Loader", bg="#1E1E2E", fg="#A6ACCD", font=("Arial", 16, "bold"))
+    lbl.pack(pady=20)
+    
+    spinner = DotSpinner(root, width=300, height=300)
+    spinner.pack(expand=True)
+    root.mainloop()
